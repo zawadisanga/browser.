@@ -21,7 +21,9 @@ const JWT_SECRET = process.env.JWT_SECRET || 'cloud-browser-ultimate-secret-key-
 const SALT_ROUNDS = 10;
 
 // ==================== CREATE DIRECTORIES ====================
-const dbDir = './database';
+// Badili kuwa hii (Render inatumia path tofauti):
+
+const dbDir = process.env.RENDER ? '/opt/render/project/src/database' : './database';
 if (!fs.existsSync(dbDir)) fs.mkdirSync(dbDir, { recursive: true });
 
 // ==================== DATABASE SETUP ====================
@@ -30,8 +32,12 @@ let db;
 async function initDatabase() {
     try {
         db = await open({
-            filename: './database/database.sqlite',
-            driver: sqlite3.Database
+           // Na badili filename ya database kuwa:
+
+const dbPath = process.env.RENDER 
+    ? '/opt/render/project/src/database/database.sqlite' 
+    : './database/database.sqlite';
+
         });
         
         await db.exec(`
