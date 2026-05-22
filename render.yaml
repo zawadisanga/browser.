@@ -1,0 +1,30 @@
+# render.yaml - Cloud Browser Professional Edition
+# Hii file inaelezea Render jinsi ya kujenga app yako
+
+services:
+  - type: web
+    name: cloud-browser
+    runtime: node
+    repo: https://github.com/zawadisanga/cloud-browser
+    branch: main
+    plan: free
+    envVars:
+      - key: NODE_VERSION
+        value: 18.17.0
+      - key: NODE_OPTIONS
+        value: --max-old-space-size=512
+      - key: PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD
+        value: "0"
+      - key: PLAYWRIGHT_BROWSERS_PATH
+        value: "0"
+    buildCommand: |
+      npm install
+      npx playwright install chromium
+      npx playwright install-deps
+    startCommand: node server.js
+    healthCheckPath: /health
+    autoDeploy: true
+    disk:
+      name: database
+      mountPath: /opt/render/project/src/database
+      sizeGB: 1
